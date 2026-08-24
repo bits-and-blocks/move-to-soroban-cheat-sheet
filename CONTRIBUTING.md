@@ -55,6 +55,12 @@ Cross-references between pages are relative Markdown links (`../README.md`,
 `03-state-and-storage.md#33-get-returns-a-copy--false-friend`) so they resolve on GitHub and
 in GitBook alike.
 
+**Edit in Git, not in the GitBook editor.** The sync is bidirectional: a change made in the
+GitBook UI commits straight to `main`, which means it never passes through a pull request and
+so never faces the blocking CI job above. A snippet that doesn't compile would be published
+first and go red afterwards — precisely the failure mode the compile rule exists to prevent.
+GitBook is the publishing target; the repository is the source of truth.
+
 ## Scope
 
 In: Move↔Soroban differentials, traps, platform semantics (storage, auth, metering,
