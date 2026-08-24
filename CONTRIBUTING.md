@@ -19,7 +19,7 @@ not an introduction.
 
 ## The one hard rule: Soroban snippets must compile
 
-Every Soroban snippet in the README exists as real code under `verify/`, and CI runs it on
+Every Soroban snippet in `docs/` exists as real code under `verify/`, and CI runs it on
 every pull request and weekly: a blocking job against the pinned SDK — `verify/Cargo.lock`
 is committed and the job runs `--locked`, so the version in the README header is the
 version actually tested — plus a non-blocking job against the latest published release.
@@ -39,6 +39,22 @@ not prose. That is how the `try_` nesting error in the first draft was caught.
 
 Move snippets are illustrative and are not compiled. If one is wrong, an issue is fine.
 
+## Layout
+
+`README.md` is the landing page and the quick map — the 37-row table that indexes everything.
+Each numbered section is a page under `docs/`. The repo is synced to GitBook, so two files are
+load-bearing for the published site:
+
+- `SUMMARY.md` — the sidebar. A page that isn't listed here doesn't appear in the book.
+- `.gitbook.yaml` — points GitBook at `README.md` and `SUMMARY.md`.
+
+Adding a section means: a new `docs/NN-slug.md`, a row (or rows) in the README quick map, an
+entry in the README contents list, and a line in `SUMMARY.md`.
+
+Cross-references between pages are relative Markdown links (`../README.md`,
+`03-state-and-storage.md#33-get-returns-a-copy--false-friend`) so they resolve on GitHub and
+in GitBook alike.
+
 ## Scope
 
 In: Move↔Soroban differentials, traps, platform semantics (storage, auth, metering,
@@ -52,5 +68,5 @@ chain advocacy in either direction.
 
 The Soroban material follows Stellar's [`stellar-dev-skill`](https://github.com/stellar/stellar-dev-skill)
 and the official developer docs; the Move material follows the Aptos docs and Move book.
-Both are credited in §12. If you add material, link the primary source — an unsourced
+Both are credited in §13. If you add material, link the primary source — an unsourced
 claim here is a future issue.
