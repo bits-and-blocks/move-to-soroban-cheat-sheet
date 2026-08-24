@@ -48,6 +48,10 @@ load-bearing for the published site:
 - `SUMMARY.md` — the sidebar. A page that isn't listed here doesn't appear in the book.
 - `.gitbook.yaml` — points GitBook at `README.md` and `SUMMARY.md`.
 
+One file is tracked but *not* read by GitBook: `.gitbook/assistant-instructions.md` is the
+reviewable copy of the AI Assistant's custom instructions, which only take effect once pasted
+into the space settings. Edit it here, get it reviewed, then paste.
+
 Adding a section means: a new `docs/NN-slug.md`, a row (or rows) in the README quick map, an
 entry in the README contents list, and a line in `SUMMARY.md`.
 
