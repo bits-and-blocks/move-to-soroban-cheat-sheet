@@ -2,8 +2,10 @@
 
 ## 2.1 Capability structs → role addresses + `require_auth` ⚠
 
-**Move** — authority as a scarce value: `MintCapability`, `BurnCapability`, your `AdminCap`. Scarcity is type-enforced — no `copy`, constructor private to the defining module, possession = permission.
-[Move: structs & resources](https://aptos.dev/build/smart-contracts/book/structs-and-resources) · [abilities](https://aptos.dev/build/smart-contracts/book/abilities)
+**Move** — authority as a value: `MintCapability`, `BurnCapability`, your `AdminCap`. Unforgeability comes from the constructor being private to the defining module — possession is permission because you cannot mint one yourself. The ability set is worth reading rather than assuming: `MintCapability<phantom CoinType> has copy, store` is *duplicable* and **not** droppable (hence `coin::destroy_mint_cap`), while a hand-rolled `AdminCap has store` is neither. "Capabilities are linear" is already false on the Move side, before Soroban enters it.
+
+Object and FA refs — `ExtendRef`, `TransferRef`, `MintRef`, `BurnRef` — are the same mechanic wearing the object model's clothes: per-object rather than per-type, minted at creation instead of at module init. They decompose the same way, and carry one extra guarantee Soroban cannot reproduce (§2.2).
+[Move: structs & resources](https://aptos.dev/build/smart-contracts/book/structs-and-resources) · [abilities](https://aptos.dev/build/smart-contracts/book/abilities) · [`coin.move`](https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/framework/aptos-framework/sources/coin.move)
 
 **Soroban** — ⚠ **FALSE FRIEND: there are no scarce values.** Any code can construct any `#[contracttype]` value; a `DistributorCap` struct passed as an argument is trivially forgeable, and one *stored* by your contract grants nothing by existing — nothing checks for it. Porting the capability pattern literally produces decorative security.
 
@@ -37,6 +39,13 @@ What you lose vs. Move: capabilities were *transferable, storable, divisible* va
 [Deployer example](https://developers.stellar.org/docs/build/smart-contracts/example-contracts/deployer)
 
 Rule of thumb: reach for a keyed entry first; deploy an instance only when the thing must *independently* hold tokens or authorize.
+
+**⚠ The creation-time freeze is the part with no Soroban analogue at all.** Refs can only be minted from a `ConstructorRef`, and `struct ConstructorRef has drop` — no `store`, so it cannot outlive the transaction that created the object. The set of refs that will ever exist is therefore fixed at creation, which makes *absence* a permanent, externally verifiable property: "this FA has no `TransferRef`" means nobody can mint one later, including the issuer, and a holder can check that before touching it.
+
+Soroban cannot express this. The nearest construction is an admin contract with no such entry point, which is only as strong as its upgrade policy (§5.5) — a property of the deployed Wasm and of whoever may replace it, not of the asset. Porting a design that leans on a *deliberately absent* ref means rebuilding that guarantee as immutability (no upgrade path at all) and documenting it, because the platform will not enforce it and no counterparty can verify it from the asset alone.
+
+Note the ability sets while you are here, since they invert the classic capabilities in §2.1: `ExtendRef`/`TransferRef`/`DeleteRef`/`DeriveRef` are `drop, store` (storable, droppable, **not** copyable) and `LinearTransferRef` is `drop` alone — one-shot by construction.
+[`object.move`](https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/framework/aptos-framework/sources/object.move) · [`fungible_asset.move`](https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/framework/aptos-framework/sources/fungible_asset.move)
 
 ## 2.3 Hot potato → ∅
 
