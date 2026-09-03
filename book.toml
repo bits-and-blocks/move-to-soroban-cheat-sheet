@@ -22,7 +22,10 @@ site-url = "/move-to-soroban-cheat-sheet/"
 # Sections carry their own numbers ("3. State & storage"), so mdBook's
 # generated labels would read as "4. 3. State & storage".
 no-section-label = true
-default-theme = "rust"
+# Dark by default regardless of the reader's OS preference: both the light-mode
+# and the dark-mode default resolve to navy. The theme picker still works, and a
+# reader who picks another theme keeps it.
+default-theme = "navy"
 preferred-dark-theme = "navy"
 
 [output.html.search]
