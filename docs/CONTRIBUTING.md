@@ -6,7 +6,7 @@ helps:
 
 ## What's most useful
 
-1. **Corrections.** A wrong mapping is worse than a missing one — someone will act on it.
+1. **Corrections.** A wrong mapping is worse than a missing one; someone will act on it.
    If a claim here is false, say so, even bluntly, even without a fix.
 2. **Missing Move concepts.** If you reached for something from Move and couldn't find the
    Soroban answer here, that gap is worth an issue on its own. You don't need the answer.
@@ -20,9 +20,9 @@ not an introduction.
 ## The one hard rule: Soroban snippets must compile
 
 Every Soroban snippet in `docs/` exists as real code under `verify/`, and CI runs it on
-every pull request and weekly: a blocking job against the pinned SDK — `verify/Cargo.lock`
+every pull request and weekly: a blocking job against the pinned SDK, `verify/Cargo.lock`
 is committed and the job runs `--locked`, so the version in the `docs/index.md` header is the
-version actually tested — plus a non-blocking job against the latest published release.
+version actually tested, plus a non-blocking job against the latest published release.
 Documentation that can rot silently is how a reference becomes a liability.
 
 If you change or add a Soroban snippet:
@@ -34,7 +34,7 @@ cargo test          # must pass
 
 Put the snippet in `src/lib.rs` (contract-side code), `src/advanced.rs` (auth trees,
 deployer, custom accounts), or `tests/` (anything asserting runtime behaviour). Behavioural
-claims — "X resets after Y", "the error lands in this position" — should be an `assert!`,
+claims, "X resets after Y", "the error lands in this position", should be an `assert!`,
 not prose. That is how the `try_` nesting error in the first draft was caught.
 
 Move snippets are illustrative and are not compiled. If one is wrong, an issue is fine.
@@ -45,11 +45,11 @@ The book is generated with [mdBook](https://rust-lang.github.io/mdBook/) and pub
 GitHub Pages from `main`. `docs/` is the book source, so every file in it ends up on the
 site:
 
-- `docs/index.md` — the landing page and the quick map, the 37-row table that indexes
+- `docs/index.md`, the landing page and the quick map, the 37-row table that indexes
   everything.
-- `docs/NN-slug.md` — one page per numbered section.
-- `docs/SUMMARY.md` — the sidebar. A page that isn't listed here doesn't appear in the book.
-- `book.toml` — mdBook configuration, at the repo root.
+- `docs/NN-slug.md`, one page per numbered section.
+- `docs/SUMMARY.md`, the sidebar. A page that isn't listed here doesn't appear in the book.
+- `book.toml`, mdBook configuration, at the repo root.
 
 The root `README.md` is the GitHub landing page only. It is a pointer to the site and is not
 part of the book.
@@ -82,5 +82,5 @@ chain advocacy in either direction.
 
 The Soroban material follows Stellar's [`stellar-dev-skill`](https://github.com/stellar/stellar-dev-skill)
 and the official developer docs; the Move material follows the Aptos docs and Move book.
-Both are credited in §13. If you add material, link the primary source — an unsourced
+Both are credited in §13. If you add material, link the primary source; an unsourced
 claim here is a future issue.
