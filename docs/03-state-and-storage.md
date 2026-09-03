@@ -93,4 +93,4 @@ env.storage().persistent().extend_ttl(&DataKey::Buckets(asset), 30 * DAY, 120 * 
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 2. Capabilities & the object model](02-capabilities-and-the-object-model.md) · [4. Types & abilities →](04-types-and-abilities.md)
+[← Cheat sheet index](index.md) · [← 2. Capabilities & the object model](02-capabilities-and-the-object-model.md) · [4. Types & abilities →](04-types-and-abilities.md)

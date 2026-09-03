@@ -68,4 +68,4 @@ Escrow/custody = the token contract says your address holds N, plus **your own b
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 3. State & storage](03-state-and-storage.md) · [5. Modules vs. contracts →](05-modules-vs-contracts.md)
+[← Cheat sheet index](index.md) · [← 3. State & storage](03-state-and-storage.md) · [5. Modules vs. contracts →](05-modules-vs-contracts.md)

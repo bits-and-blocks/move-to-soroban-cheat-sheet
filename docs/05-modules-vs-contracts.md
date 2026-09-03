@@ -137,4 +137,4 @@ pub fn transfer(env: Env, from: Address, to: Address, amount: i128) {
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 4. Types & abilities](04-types-and-abilities.md) · [6. Execution semantics →](06-execution-semantics.md)
+[← Cheat sheet index](index.md) · [← 4. Types & abilities](04-types-and-abilities.md) · [6. Execution semantics →](06-execution-semantics.md)

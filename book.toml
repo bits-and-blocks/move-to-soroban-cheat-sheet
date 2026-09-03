@@ -1,0 +1,29 @@
+# The book is generated with mdBook and published to GitHub Pages by
+# .github/workflows/pages.yml. `docs/` is the source directory: mdBook copies
+# everything under `src` into the site, so the source directory holds the book
+# and nothing else — verify/, LICENSE and the workflows stay outside it.
+
+[book]
+title = "Move -> Soroban: the differential cheat sheet"
+description = "A differential reference for Aptos Move developers shipping Soroban contracts: what carries over, what does not, and where the analogy breaks."
+language = "en"
+src = "docs"
+
+[build]
+build-dir = "book"
+# A link to a page that is not in SUMMARY.md is a mistake, not a request to
+# scaffold an empty chapter.
+create-missing = false
+
+[output.html]
+git-repository-url = "https://github.com/bits-and-blocks/move-to-soroban-cheat-sheet"
+edit-url-template = "https://github.com/bits-and-blocks/move-to-soroban-cheat-sheet/edit/main/{path}"
+site-url = "/move-to-soroban-cheat-sheet/"
+# Sections carry their own numbers ("3. State & storage"), so mdBook's
+# generated labels would read as "4. 3. State & storage".
+no-section-label = true
+default-theme = "rust"
+preferred-dark-theme = "navy"
+
+[output.html.search]
+enable = true

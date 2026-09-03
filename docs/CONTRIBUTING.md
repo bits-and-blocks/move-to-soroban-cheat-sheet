@@ -21,7 +21,7 @@ not an introduction.
 
 Every Soroban snippet in `docs/` exists as real code under `verify/`, and CI runs it on
 every pull request and weekly: a blocking job against the pinned SDK — `verify/Cargo.lock`
-is committed and the job runs `--locked`, so the version in the README header is the
+is committed and the job runs `--locked`, so the version in the `docs/index.md` header is the
 version actually tested — plus a non-blocking job against the latest published release.
 Documentation that can rot silently is how a reference becomes a liability.
 
@@ -41,25 +41,33 @@ Move snippets are illustrative and are not compiled. If one is wrong, an issue i
 
 ## Layout
 
-`README.md` is the landing page and the quick map — the 37-row table that indexes everything.
-Each numbered section is a page under `docs/`. The repo is synced to GitBook, so two files are
-load-bearing for the published site:
+The book is generated with [mdBook](https://rust-lang.github.io/mdBook/) and published to
+GitHub Pages from `main`. `docs/` is the book source, so every file in it ends up on the
+site:
 
-- `SUMMARY.md` — the sidebar. A page that isn't listed here doesn't appear in the book.
-- `.gitbook.yaml` — points GitBook at `README.md` and `SUMMARY.md`.
+- `docs/index.md` — the landing page and the quick map, the 37-row table that indexes
+  everything.
+- `docs/NN-slug.md` — one page per numbered section.
+- `docs/SUMMARY.md` — the sidebar. A page that isn't listed here doesn't appear in the book.
+- `book.toml` — mdBook configuration, at the repo root.
 
-Adding a section means: a new `docs/NN-slug.md`, a row (or rows) in the README quick map, an
-entry in the README contents list, and a line in `SUMMARY.md`.
+The root `README.md` is the GitHub landing page only. It is a pointer to the site and is not
+part of the book.
 
-Cross-references between pages are relative Markdown links (`../README.md`,
+Adding a section means: a new `docs/NN-slug.md`, a row (or rows) in the quick map, an entry in
+the contents list in `docs/index.md`, and a line in `docs/SUMMARY.md`.
+
+Cross-references between pages are relative Markdown links (`index.md`,
 `03-state-and-storage.md#33-get-returns-a-copy--false-friend`) so they resolve on GitHub and
-in GitBook alike.
+on the published site alike. mdBook rewrites `.md` to `.html` at build time; it does not
+rewrite `README.md` to `index.html`, which is why the landing page is named `index.md`.
 
-**Edit in Git, not in the GitBook editor.** The sync is bidirectional: a change made in the
-GitBook UI commits straight to `main`, which means it never passes through a pull request and
-so never faces the blocking CI job above. A snippet that doesn't compile would be published
-first and go red afterwards — precisely the failure mode the compile rule exists to prevent.
-GitBook is the publishing target; the repository is the source of truth.
+To preview locally:
+
+```bash
+cargo install mdbook   # or: brew install mdbook
+mdbook serve --open
+```
 
 ## Scope
 

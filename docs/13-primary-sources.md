@@ -8,4 +8,4 @@
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 12. Verification](12-verification.md)
+[← Cheat sheet index](index.md) · [← 12. Verification](12-verification.md)

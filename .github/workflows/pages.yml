@@ -1,0 +1,60 @@
+name: pages
+
+# Publishes docs/ as an mdBook site at
+# https://bits-and-blocks.github.io/move-to-soroban-cheat-sheet/
+#
+# `verify` is what keeps the snippets honest; this workflow only publishes. It
+# runs on pull requests too, without deploying, so a broken SUMMARY.md or a link
+# to a page that isn't in the book fails review rather than the site.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# A queued deploy should be superseded by a newer commit, not run after it.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  MDBOOK_VERSION: '0.5.4'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mdBook
+        run: |
+          curl -fsSL "https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz" \
+            | tar -xz -C /usr/local/bin
+          mdbook --version
+
+      # create-missing = false, so a SUMMARY.md entry pointing at a file that
+      # does not exist fails here instead of publishing a hole.
+      - name: Build
+        run: mdbook build
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          path: book
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -53,4 +53,4 @@ A no-ability struct that must be consumed in the same transaction (flash-loan re
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 1. Identity & authorization](01-identity-and-authorization.md) · [3. State & storage →](03-state-and-storage.md)
+[← Cheat sheet index](index.md) · [← 1. Identity & authorization](01-identity-and-authorization.md) · [3. State & storage →](03-state-and-storage.md)
