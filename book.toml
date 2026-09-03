@@ -18,7 +18,9 @@ create-missing = false
 [output.html]
 git-repository-url = "https://github.com/bits-and-blocks/move-to-soroban-cheat-sheet"
 edit-url-template = "https://github.com/bits-and-blocks/move-to-soroban-cheat-sheet/edit/main/{path}"
-site-url = "/move-to-soroban-cheat-sheet/"
+# The site is served at the root of docs.bitsandblocks.tech (docs/CNAME), not
+# under a repository path. This is what the 404 page uses to build its links.
+site-url = "/"
 # Sections carry their own numbers ("3. State & storage"), so mdBook's
 # generated labels would read as "4. 3. State & storage".
 no-section-label = true
