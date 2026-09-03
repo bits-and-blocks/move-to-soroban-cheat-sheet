@@ -13,7 +13,7 @@ For Aptos Move developers shipping Soroban contracts. Each entry is composed in 
 * ∅ **NO ANALOGUE**: nothing on the other side, don't force one.
 * 🔧 **DIRECT SWAP**: mechanical rename, low risk.
 
-> **Verified against `soroban-sdk` 27.0.6 · rustc 1.91.1 · Aptos Move 9.4.0** Every Soroban snippet in this document compiles and, where it asserts behaviour, runs green, see [Verification](12-verification.md). Move snippets are illustrative and not compiled.
+> **Verified against `soroban-sdk` 27.0.6 · rustc 1.91.1 · Aptos Move 9.4.0** Every Soroban snippet in this document compiles and, where it asserts behaviour, runs green, see [Verification](12-verification.md) — which also records how this was drafted. Move snippets are illustrative and not compiled.
 
 **Version note.** `soroban-sdk` major = Stellar protocol version (SDK 27 ↔ protocol 27). Network limits and TTL floors are set by validator vote; the numbers in §6.4 match `InvocationResourceLimits::mainnet()` as baked into SDK 27.0.6 (a snapshot dated 2026-07-10 — the SDK itself notes these are hardcoded and require an SDK update to refresh). Check live values before relying on them: [Stellar Lab network limits](https://lab.stellar.org/network-limits) · `stellar network settings --network mainnet` · [crates.io/soroban-sdk](https://crates.io/crates/soroban-sdk).
 

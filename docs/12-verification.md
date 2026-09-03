@@ -26,6 +26,18 @@ where the plausible guess is wrong:
 
 Move snippets are illustrative and are not compiled.
 
+## How this was written
+
+These notes were drafted with AI assistance (Claude) against the primary sources in
+[§13](13-primary-sources.md), then checked by compiling. That ordering is the point: the
+Soroban side is machine-checked, so a plausible-sounding invention fails the build rather than
+reaching you. The four rows above are exactly that, caught exactly that way.
+
+The Move side has no such gate. Move snippets are not compiled, and the analogies — what maps
+to what, and where the mapping breaks — are argument rather than test output. Treat them as
+you would any secondhand mapping: good for orientation, worth confirming against
+[§13](13-primary-sources.md) before you rely on them.
+
 ---
 
 [← Cheat sheet index](index.md) · [← 11. Porting reflexes — the grep-able checklist](11-porting-reflexes.md) · [13. Primary sources →](13-primary-sources.md)
