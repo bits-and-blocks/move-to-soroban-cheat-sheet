@@ -58,4 +58,4 @@ assert_eq!(
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 6. Execution semantics](06-execution-semantics.md) · [8. Tokens →](08-tokens.md)
+[← Cheat sheet index](index.md) · [← 6. Execution semantics](06-execution-semantics.md) · [8. Tokens →](08-tokens.md)

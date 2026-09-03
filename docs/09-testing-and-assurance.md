@@ -54,4 +54,4 @@ Verifying Wasm has one structural advantage over verifying Move bytecode: Soroba
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 8. Tokens](08-tokens.md) · [10. Toolchain quick map →](10-toolchain.md)
+[← Cheat sheet index](index.md) · [← 8. Tokens](08-tokens.md) · [10. Toolchain quick map →](10-toolchain.md)

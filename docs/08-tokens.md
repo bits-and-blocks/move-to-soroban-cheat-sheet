@@ -44,4 +44,4 @@ Where the analogy breaks:
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 7. Events](07-events.md) · [9. Testing & assurance →](09-testing-and-assurance.md)
+[← Cheat sheet index](index.md) · [← 7. Events](07-events.md) · [9. Testing & assurance →](09-testing-and-assurance.md)

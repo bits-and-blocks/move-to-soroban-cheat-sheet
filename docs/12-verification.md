@@ -28,4 +28,4 @@ Move snippets are illustrative and are not compiled.
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 11. Porting reflexes — the grep-able checklist](11-porting-reflexes.md) · [13. Primary sources →](13-primary-sources.md)
+[← Cheat sheet index](index.md) · [← 11. Porting reflexes — the grep-able checklist](11-porting-reflexes.md) · [13. Primary sources →](13-primary-sources.md)

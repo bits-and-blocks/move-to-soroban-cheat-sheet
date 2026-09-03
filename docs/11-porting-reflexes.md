@@ -17,4 +17,4 @@
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 10. Toolchain quick map](10-toolchain.md) · [12. Verification →](12-verification.md)
+[← Cheat sheet index](index.md) · [← 10. Toolchain quick map](10-toolchain.md) · [12. Verification →](12-verification.md)

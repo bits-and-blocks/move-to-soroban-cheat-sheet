@@ -81,4 +81,4 @@ Private helpers = ordinary non-`pub` Rust fns, or fns outside `#[contractimpl]`.
 
 ---
 
-[← Cheat sheet index](../README.md) · [2. Capabilities & the object model →](02-capabilities-and-the-object-model.md)
+[← Cheat sheet index](index.md) · [2. Capabilities & the object model →](02-capabilities-and-the-object-model.md)

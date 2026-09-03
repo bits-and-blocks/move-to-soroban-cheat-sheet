@@ -18,4 +18,4 @@
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 9. Testing & assurance](09-testing-and-assurance.md) · [11. Porting reflexes — the grep-able checklist →](11-porting-reflexes.md)
+[← Cheat sheet index](index.md) · [← 9. Testing & assurance](09-testing-and-assurance.md) · [11. Porting reflexes — the grep-able checklist →](11-porting-reflexes.md)

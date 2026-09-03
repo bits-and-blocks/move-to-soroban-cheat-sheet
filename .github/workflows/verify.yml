@@ -1,6 +1,6 @@
 name: verify
 
-# The README claims every Soroban snippet compiles and every behavioural claim
+# The cheat sheet claims every Soroban snippet compiles and every behavioural claim
 # is asserted. This is what makes that claim falsifiable: `pinned` gates merges,
 # `latest` is advisory and tells us the SDK moved under us before a reader finds out.
 
@@ -34,7 +34,7 @@ jobs:
         with:
           workspaces: verify
 
-      # --locked fails if Cargo.lock would change: the version in the README
+      # --locked fails if Cargo.lock would change: the version in the docs/index.md
       # header is the version actually under test, or the build goes red.
       - name: Test against the committed lockfile
         run: cargo test --locked --all-targets

@@ -68,4 +68,4 @@ What actually moves the needle: minimize distinct entries touched (fixed cost ea
 
 ---
 
-[← Cheat sheet index](../README.md) · [← 5. Modules vs. contracts](05-modules-vs-contracts.md) · [7. Events →](07-events.md)
+[← Cheat sheet index](index.md) · [← 5. Modules vs. contracts](05-modules-vs-contracts.md) · [7. Events →](07-events.md)
