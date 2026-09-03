@@ -45,4 +45,4 @@ For Aptos Move developers shipping Soroban contracts. Each entry is composed in 
 
 ## Contributing
 
-Corrections are the most valuable contribution here — a wrong mapping is worse than a missing one. Missing Move concepts are equally welcome as issues even without an answer. See [CONTRIBUTING.md](CONTRIBUTING.md); the one hard rule is that Soroban snippets must compile.
+Corrections are the most valuable contribution. Missing Move concepts are equally welcome as issues even without an answer. See [CONTRIBUTING.md](CONTRIBUTING.md); All Soroban snippets must compile.
