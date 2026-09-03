@@ -31,14 +31,14 @@ table indexing every differential; each row links to the section that explains i
 8. [Tokens](docs/08-tokens.md)
 9. [Testing & assurance](docs/09-testing-and-assurance.md)
 10. [Toolchain quick map](docs/10-toolchain.md)
-11. [Porting reflexes — the grep-able checklist](docs/11-porting-reflexes.md)
+11. [Porting reflexes, the grep-able checklist](docs/11-porting-reflexes.md)
 12. [Verification](docs/12-verification.md)
 13. [Primary sources](docs/13-primary-sources.md)
 
 ## Verification
 
 Every Soroban snippet in `docs/` exists as real code under `verify/` and runs in CI on every
-pull request and weekly — a blocking job against the pinned SDK and an advisory job against
+pull request and weekly; a blocking job against the pinned SDK and an advisory job against
 the latest published release. Move snippets are illustrative and are not compiled. See
 [Verification](docs/12-verification.md).
 

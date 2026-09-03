@@ -9,7 +9,7 @@ on:
     branches: [main]
   pull_request:
   schedule:
-    # Mondays 06:00 UTC — SDK drift shows up as a red build, not a stale doc.
+    # Mondays 06:00 UTC; SDK drift shows up as a red build, not a stale doc.
     - cron: '0 6 * * 1'
   workflow_dispatch:
 
@@ -42,7 +42,7 @@ jobs:
   latest:
     name: latest SDK (advisory)
     runs-on: ubuntu-latest
-    # Never blocks a merge — an upstream release breaking us is information,
+    # Never blocks a merge; an upstream release breaking us is information,
     # not a reason to stop the queue.
     continue-on-error: true
     steps:
@@ -59,7 +59,7 @@ jobs:
           key: latest
 
       # `cargo update` alone stays inside the caret range, so it would never
-      # see a new major — and a new soroban-sdk major is exactly the drift
+      # see a new major, and a new soroban-sdk major is exactly the drift
       # worth hearing about. Re-add at latest instead.
       - name: Move to the latest published soroban-sdk
         run: |
