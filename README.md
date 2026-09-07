@@ -16,7 +16,7 @@ structure:
 * ∅ **NO ANALOGUE**: nothing on the other side, don't force one.
 * 🔧 **DIRECT SWAP**: mechanical rename, low risk.
 
-The [quick map](https://bits-and-blocks.github.io/move-to-soroban-cheat-sheet/) is a 37-row
+The [quick map](https://bits-and-blocks.github.io/move-to-soroban-cheat-sheet/) is a 38-row
 table indexing every differential; each row links to the section that explains it.
 
 ## Contents
