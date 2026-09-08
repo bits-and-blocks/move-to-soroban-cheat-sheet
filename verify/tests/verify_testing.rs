@@ -60,6 +60,27 @@ fn sac_registration_and_transfer() {
 }
 
 #[test]
+fn settlement_moves_balance_not_just_arithmetic() {
+    // §4.6: the assertion that catches a split which settled nothing is on
+    // balance, not on the call returning Ok.
+    let (env, _id, client, _g, _d) = setup();
+    let issuer = Address::generate(&env);
+    let sac = env.register_stellar_asset_contract_v2(issuer);
+    let asset = sac.address();
+    let payer = Address::generate(&env);
+    let beneficiary = Address::generate(&env);
+    let t = TokenClient::new(&env, &asset);
+
+    StellarAssetClient::new(&env, &asset).mint(&payer, &10_000);
+    assert_eq!(t.balance(&beneficiary), 0);
+
+    client.disburse(&asset, &payer, &beneficiary, &1_000, &500u32);
+
+    assert_eq!(t.balance(&beneficiary), 50); // 500 bps of 1_000
+    assert_eq!(t.balance(&payer), 9_950);
+}
+
+#[test]
 fn auths_shape_and_reset() {
     let (env, id, client, _g, _d) = setup();
     let issuer = Address::generate(&env);

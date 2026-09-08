@@ -66,6 +66,26 @@ Escrow/custody = the token contract says your address holds N, plus **your own b
 - ⚠ The canonical token amount is `i128`, **signed**. `transfer(from, to, -1000)` is a withdrawal *from `to`* if unchecked. Validate `amount > 0` at **every** entry point taking an amount. Having `i128` in the language is not the same as meeting it on the money path: Aptos amounts are `u64`, so no Move reflex was ever trained against this attack.
 - ⚠ Overflow safety is a **build-profile flag**, not a language guarantee: Rust wraps in release unless `overflow-checks = true` is set (the Stellar scaffold sets it; a copied `Cargo.toml` without it wraps silently). Use explicit `checked_add/sub/mul` on every money path regardless; it survives profile mistakes and fails with *your* typed error. `U256`/`I256` have `checked_*` (protocol 26+).
 
+## 4.6 The split is not the settlement ⚠ FALSE FRIEND
+
+**Move**, you cannot write this bug. Splitting a payment means holding the value: `coin::withdraw` puts a `Coin<T>` in your hand, `coin::extract` cuts it in two, and every piece has to be deposited, merged, or explicitly destroyed before the function returns (§4.1). Computing a share and moving it are one act, because the share *is* the value.
+
+**Soroban**, they are two unrelated acts and only one of them is enforced. The split is `i128` arithmetic on plain data; the movement is a call to a token contract (§4.2) that you can simply not make. Omit it and the code compiles, the function succeeds, the state updates, the event fires, and the tests stay green.
+
+```rust
+let cut = mul_div_bps(&env, amount, bps);      // arithmetic: always runs
+token::TokenClient::new(&env, &asset)          // ← delete these two lines and the
+    .transfer(&payer, &beneficiary, &cut);     //   function still succeeds
+Settled { beneficiary, asset, amount: cut }.publish(&env);
+```
+
+- ⚠ **An event is not a receipt.** §7.1 settles that no contract can read its own events; the corollary for the reviewer is that nobody should read them as evidence of transfer either. A dashboard reporting fees paid may be reporting arithmetic. If value moved, the token contract emitted its own `transfer` event beside yours (§7) and the recipient's `balance` changed.
+- ⚠ **Auth is not payment.** `require_auth()` proves the caller authorized *this invocation*, not that anything was paid for it. The Move reflex is safe by accident: the counterparty's `Coin` had to arrive in the same call for the call to typecheck. The Soroban equivalent is making the transfer yourself, since `TokenClient::transfer(&payer, …)` re-enters the payer's auth for that exact amount, and *that* is the check. A state change gated only on the beneficiary's own `require_auth` is free to whoever calls it first.
+- ⚠ **"The caller pays first, then invokes us" cannot be made atomic client-side.** By §5.6 a Soroban transaction carries exactly one operation, so there is no payment-op-plus-invocation pairing and no multicall to fall back on. Either the `transfer` runs inside the invocation or the halves are separate transactions, and either half can land alone. An entry point whose doc comment explains what the caller was supposed to have already done has an unenforced precondition, not a protocol.
+- The grep: every function computing a rate, a fee, a share, or a payout should hold a `token::TokenClient` call in the same body. Split computed and only published ⇒ that function settled nothing.
+- The test blind spot has the same shape. `mock_all_auths` plus an assertion that ownership flipped passes over a payment path that never existed, and the test name will still say it enforces the fee. Assert each participant's `balance` across the call; §4.1's solvency invariant is the oracle (§9).
+
+
 ---
 
 [← Cheat sheet index](index.md) · [← 3. State & storage](03-state-and-storage.md) · [5. Modules vs. contracts →](05-modules-vs-contracts.md)

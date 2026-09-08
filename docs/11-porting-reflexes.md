@@ -14,6 +14,7 @@
 12. One upgrade path per contract: either a gated `update_current_contract_wasm` or a repointable address in a caller; never both, ideally neither on custody.
 13. Getters are pure; no writes, no TTL bumps: view traffic is simulation, and simulation discards writes.
 14. Nothing the contract branches on lives only in events; events are write-only in production; if logic reads it, store it.
+15. Every function computing a share, fee, or payout makes the `transfer` call in the same body; a split that is only published settled nothing, and only a `balance` assertion catches it.
 
 ---
 

@@ -79,6 +79,14 @@ pub struct Contribution {
     pub split: BucketSet,
 }
 
+#[contractevent]
+pub struct Settled {
+    #[topic]
+    pub beneficiary: Address,
+    pub asset: Address,
+    pub amount: i128,
+}
+
 #[contract]
 pub struct ZakatPool;
 
@@ -137,6 +145,30 @@ impl ZakatPool {
         .publish(&env);
 
         assert_solvent(&env, &asset);
+        Ok(())
+    }
+
+    // §4.6 the split is arithmetic; the settlement is the call
+    pub fn disburse(
+        env: Env,
+        asset: Address,
+        payer: Address,
+        beneficiary: Address,
+        amount: i128,
+        bps: u32,
+    ) -> Result<(), Error> {
+        payer.require_auth();
+        if amount <= 0 || bps > 10_000 {
+            return Err(Error::InvalidAmount);
+        }
+        let cut = mul_div_bps(&env, amount, bps);
+        token::TokenClient::new(&env, &asset).transfer(&payer, &beneficiary, &cut);
+        Settled {
+            beneficiary,
+            asset,
+            amount: cut,
+        }
+        .publish(&env);
         Ok(())
     }
 
@@ -216,6 +248,17 @@ impl ZakatPool {
 fn _require_distributor(env: &Env) {
     let d: Address = env.storage().instance().get(&DataKey::Distributor).unwrap();
     d.require_auth();
+}
+
+// §4.5 checked share, used by §4.6
+fn mul_div_bps(env: &Env, amount: i128, bps: u32) -> i128 {
+    match amount
+        .checked_mul(bps as i128)
+        .and_then(|v| v.checked_div(10_000))
+    {
+        Some(v) => v,
+        None => panic_with_error!(env, Error::Overflow),
+    }
 }
 
 fn assert_solvent(env: &Env, asset: &Address) {
