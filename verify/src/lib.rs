@@ -205,6 +205,11 @@ impl ZakatPool {
     pub fn mapping(env: Env) -> Map<u32, i128> {
         Map::new(&env)
     }
+
+    // §5.9 higher-order helper: the closure needs no `inline` counterpart
+    pub fn dust_total(env: Env, amounts: Vec<i128>) -> i128 {
+        sum_where(&env, &amounts, |x| x < 1_000)
+    }
 }
 
 // §2.1 role auth (private helper, not an entry point)
@@ -224,6 +229,20 @@ fn assert_solvent(env: &Env, asset: &Address) {
     if booked > held {
         panic_with_error!(env, Error::Insolvent);
     }
+}
+
+// §5.9 Move's `inline fun` + lambda param becomes a private fn generic over a closure
+fn sum_where(env: &Env, amounts: &Vec<i128>, keep: impl Fn(i128) -> bool) -> i128 {
+    let mut total: i128 = 0;
+    for x in amounts.iter() {
+        if keep(x) {
+            total = match total.checked_add(x) {
+                Some(t) => t,
+                None => panic_with_error!(env, Error::Overflow),
+            };
+        }
+    }
+    total
 }
 
 pub mod advanced;

@@ -135,6 +135,46 @@ pub fn transfer(env: Env, from: Address, to: Address, amount: i128) {
 - **Can't hook a SAC → stand in front of it.** DFA-style compliance hooks on USDC have exactly one shape on Stellar: a custody contract whose entry points wrap the transfers. The hook layer is enforced by *holding the funds*, not by dispatch registration.
 - ∅ **No function values.** Nothing function-shaped crosses the ABI or enters storage; a "callback" is a stored `Address` implementing an expected interface. The platform's own hook points work exactly this way, `__check_auth` (§1.4) *is* Soroban's AIP-73: register a contract, the host natively dispatches into a fixed signature under special rules. For strategy variation inside one contract, prefer `enum` + `match` (static, cheap, auditable) over a `Map<Symbol, Address>` handler table: every dynamic hop is full invocation overhead and widens both the trust surface and the auth tree.
 
+## 5.9 inline functions → ordinary private fns 🔧
+
+**Move**, `inline fun` bodies are expanded at the call site at compile time and never appear in bytecode as separate functions. One keyword does three unrelated jobs: it removes call overhead (and some gas), it is the only place a lambda may be passed (`f: |Accumulator, Element| Accumulator`, which is why the whole `vector::for_each` / `fold` / `filter` family is `public inline fun`), and it loosens borrow checking, since borrow checking runs *after* expansion; an inline fn may return a reference into global storage and may take aliased `&mut`/`&` arguments that a normal fn cannot.
+[Move: inline functions](https://aptos.dev/build/smart-contracts/book/functions#inline-functions)
+
+**Soroban**, ∅ keyword, and nothing to port. Everything outside `#[contractimpl]` is an ordinary Rust `fn`: private by default (§5.3), free to be generic, free to take a closure, and inlined by LLVM whether or not you write `#[inline]`, which is a hint rather than a directive. The restriction that motivated most `inline fun` declarations does not exist, so the higher-order helper needs no modifier at all:
+
+```move
+// Move: `fold` is a `public inline fun`; the lambda is legal only because of that
+let dust = vector::fold(amounts, 0, |acc, x| if (x < 1000) acc + x else acc);
+```
+
+```rust
+// Soroban: a private fn, generic over any closure. No `inline` anywhere.
+fn sum_where(env: &Env, amounts: &Vec<i128>, keep: impl Fn(i128) -> bool) -> i128 {
+    let mut total: i128 = 0;
+    for x in amounts.iter() {
+        if keep(x) {
+            total = match total.checked_add(x) {
+                Some(t) => t,
+                None => panic_with_error!(env, Error::Overflow),
+            };
+        }
+    }
+    total
+}
+
+let dust = sum_where(&env, &amounts, |x| x < 1_000);   // bound `amounts`: the loop is metered, §6.4
+```
+
+**Breaks:**
+
+- **The size trade-off stops being advice and becomes a ceiling.** Move warns that excessive inlining grows bytecode and may trip size restrictions; on Soroban that limit is 131,072 B of contract code (§6.4), network-configured, and the wasm is charged at upload (§5.1). Monomorphization is the real inliner here, one instantiation per concrete type per generic fn, and `#[inline(always)]` on a widely called helper compounds it. The fix is the release profile rather than hand-tuning: `opt-level = "z"`, `lto = true`, `codegen-units = 1`, `panic = "abort"`, `strip = "symbols"`, `debug = 0`, plus `overflow-checks = true` (§4.5); the Stellar docs note that a Rust contract without these "almost always" exceeds the size limit. `stellar contract build` optimizes by default.
+- ∅ **The reference-returning use case has nothing to port to.** `inline fun borrow_state(): &mut State` exists to hand out a live `borrow_global_mut` handle to the caller. There are no references into Soroban storage at all: `get` returns an owned copy and only `set` writes (§3.3). The idiom is not restricted here, it is meaningless here.
+- ∅ **Function values stop at the module boundary.** Move 2.2 made functions first-class (`|u64|bool has copy+drop+store`, `#[persistent]` on a non-public fn to make it storable), so a Move dispatch table can hold a *function* and a struct field can persist one. Soroban has no function-shaped value anywhere: nothing function-shaped crosses the ABI or enters storage (§5.8), and the nearest equivalent is a stored `Address` plus a `Symbol`, at full cross-contract invocation cost and full trust surface. Move meets the reentrancy this opens with a targeted guard (the VM locks the re-entered module's resources; `#[module_lock]` to lock harder); Soroban's block is blanket and host-level (§6.3).
+  [Move: function values](https://aptos.dev/build/smart-contracts/book/functions#function-values)
+- **The `public inline fun` footgun is gone.** In Move, an exported inline fn touching module-private constants or methods expands into a foreign module and breaks there, so the privacy check effectively happens at the wrong place. Rust privacy is resolved before inlining, so the same mistake does not compile.
+
+[Soroban: release profile and contract size](https://developers.stellar.org/docs/build/smart-contracts/getting-started/hello-world)
+
 ---
 
 [← Cheat sheet index](index.md) · [← 4. Types & abilities](04-types-and-abilities.md) · [6. Execution semantics →](06-execution-semantics.md)

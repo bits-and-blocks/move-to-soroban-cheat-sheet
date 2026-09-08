@@ -45,7 +45,7 @@ The book is generated with [mdBook](https://rust-lang.github.io/mdBook/) and pub
 GitHub Pages from `main`. `docs/` is the book source, so every file in it ends up on the
 site:
 
-- `docs/index.md`, the landing page and the quick map, the 37-row table that indexes
+- `docs/index.md`, the landing page and the quick map, the 38-row table that indexes
   everything.
 - `docs/NN-slug.md`, one page per numbered section.
 - `docs/SUMMARY.md`, the sidebar. A page that isn't listed here doesn't appear in the book.
